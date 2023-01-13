@@ -43,8 +43,8 @@ const addRecord: SlashCommand = {
         componentType: ComponentType.Button,
         time: 30000,
       })
-      .then((button) => {
-        button.deferUpdate();
+      .then(async (button) => {
+        await button.deferUpdate();
         if (button.customId === "confirm") {
           fetch(`${siteURI}/records`, {
             method: "POST",
@@ -65,9 +65,9 @@ const addRecord: SlashCommand = {
                 ctx.editReply({
                   content: `✅ Record was added for ${ctx.options.getString(
                     "player"
-                  )} on ${ctx.options.getString(
+                  )} on "${ctx.options.getString(
                     "level"
-                  )} (${ctx.options.getInteger(
+                  )}" (${ctx.options.getInteger(
                     "hertz"
                   )}hz) (${ctx.options.getString("link")}).`,
                   components: [],

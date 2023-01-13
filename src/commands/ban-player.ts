@@ -24,8 +24,8 @@ const banPlayer: SlashCommand = {
         componentType: ComponentType.Button,
         time: 30000,
       })
-      .then((button) => {
-        button.deferUpdate();
+      .then(async (button) => {
+        await button.deferUpdate();
         if (button.customId === "confirm") {
           fetch(`${siteURI}/players/${ctx.options.getString("name")}`, {
             method: "DELETE",
@@ -38,9 +38,9 @@ const banPlayer: SlashCommand = {
             .then((data) => {
               if (data.status === 200) {
                 ctx.editReply({
-                  content: `✅ "${ctx.options.getString(
+                  content: `✅ ${ctx.options.getString(
                     "name"
-                  )}" was banned from the mobile list.`,
+                  )} was banned from the mobile list.`,
                   components: [],
                 });
               } else if (data.status === 404) {

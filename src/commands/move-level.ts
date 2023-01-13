@@ -33,8 +33,8 @@ const moveLevel: SlashCommand = {
         componentType: ComponentType.Button,
         time: 30000,
       })
-      .then((button) => {
-        button.deferUpdate();
+      .then(async (button) => {
+        await button.deferUpdate();
         if (button.customId === "confirm") {
           fetch(`${siteURI}/levels/${ctx.options.getString("name")}`, {
             method: "PATCH",
@@ -52,7 +52,7 @@ const moveLevel: SlashCommand = {
                 ctx.editReply({
                   content: `✅ "${ctx.options.getString(
                     "name"
-                  )}" was moved to ${ctx.options.getInteger("position")}.`,
+                  )}" was moved to #${ctx.options.getInteger("position")}.`,
                   components: [],
                 });
               } else if (data.status === 404) {

@@ -32,8 +32,8 @@ const updateLevelCreator: SlashCommand = {
         componentType: ComponentType.Button,
         time: 30000,
       })
-      .then((button) => {
-        button.deferUpdate();
+      .then(async (button) => {
+        await button.deferUpdate();
         if (button.customId === "confirm") {
           fetch(`${siteURI}/levels/${ctx.options.getString("name")}`, {
             method: "PATCH",
