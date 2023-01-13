@@ -1,10 +1,5 @@
 import { Client, Collection, Events, GatewayIntentBits } from "discord.js";
-import env from "dotenv";
-import fs from "fs";
-import path from "path";
 import commands, { SlashCommand } from "./commands";
-
-env.config();
 
 console.log("Bot is starting...");
 

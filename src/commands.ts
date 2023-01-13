@@ -1,50 +1,54 @@
 import {
   SlashCommandBuilder,
-  CommandInteraction,
-  PermissionFlagsBits,
+  ChatInputCommandInteraction,
   ActionRowBuilder,
   ButtonBuilder,
-  ButtonStyle
+  ButtonStyle,
 } from "discord.js";
+import env from "dotenv";
+import addLevel from "./commands/add-level";
+import removeLevel from "./commands/remove-level";
+import moveLevel from "./commands/move-level";
+import updateLevelName from "./commands/update-level-name";
+import updateLevelCreator from "./commands/update-level-creator";
+import addPlayer from "./commands/add-player";
+import banPlayer from "./commands/ban-player";
+import updatePlayerName from "./commands/update-player-name";
+import updatePlayerDiscord from "./commands/update-player-discord";
+import addRecord from "./commands/add-record";
+import removeRecord from "./commands/remove-record";
+
+env.config();
+
+export const siteURI = process.env.SITE_URI as string;
+export const siteToken = process.env.SITE_TOKEN as string;
 
 export interface SlashCommand {
   command: SlashCommandBuilder;
-  execute: (ctx: CommandInteraction) => Promise<void>;
+  execute: (ctx: ChatInputCommandInteraction) => Promise<void>;
 }
 
-const confirmButton = new ActionRowBuilder()
-  .addComponents(
-    new ButtonBuilder()
-      .setCustomId("confirm")
-      .setLabel("Confirm")
-      .setStyle(ButtonStyle.Primary)
-  )
+export const confirmation = new ActionRowBuilder().addComponents([
+  new ButtonBuilder()
+    .setCustomId("confirm")
+    .setLabel("Confirm")
+    .setStyle(ButtonStyle.Primary),
+  new ButtonBuilder()
+    .setCustomId("cancel")
+    .setLabel("Cancel")
+    .setStyle(ButtonStyle.Secondary),
+]);
 
-const addLevel: SlashCommand = {
-  command: new SlashCommandBuilder()
-    .setName("addLevel")
-    .setDescription("Add a level to the mobile list")
-    .addStringOption((option) => 
-      option
-        .setName("name")
-        .setDescription("Level name")
-        .setRequired(true))
-    .addStringOption((option) =>
-      option
-        .setName("creator")
-        .setDescription("Level creator(s)")
-        .setRequired(true))
-    .addIntegerOption((option) =>
-      option
-        .setName("position")
-        .setDescription("List placement position")
-        .setMinValue(1)
-        .setMaxValue(100)
-        .setRequired(true))
-    .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-  execute: async (ctx) => {
-    ;
-  },
-};
-
-export default [addLevel];
+export default [
+  addLevel,
+  removeLevel,
+  moveLevel,
+  updateLevelName,
+  updateLevelCreator,
+  addPlayer,
+  banPlayer,
+  updatePlayerName,
+  updatePlayerDiscord,
+  addRecord,
+  removeRecord,
+];
