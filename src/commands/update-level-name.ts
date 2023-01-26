@@ -21,13 +21,13 @@ const updateLevelName: SlashCommand = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute: async (ctx) => {
-    const interaction = await ctx.reply({
+    const interaction = await ctx.editReply({
       content: `Updating ${ctx.options.getString(
         "name"
       )} name to "${ctx.options.getString("newname")}".`,
       components: [confirmation],
     } as InteractionReplyOptions);
-    interaction
+    await interaction
       .awaitMessageComponent({
         componentType: ComponentType.Button,
         time: 30000,

@@ -15,11 +15,11 @@ const removeLevel: SlashCommand = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute: async (ctx) => {
-    const interaction = await ctx.reply({
+    const interaction = await ctx.editReply({
       content: `Removing ${ctx.options.getString("name")}`,
       components: [confirmation],
     } as InteractionReplyOptions);
-    interaction
+    await interaction
       .awaitMessageComponent({
         componentType: ComponentType.Button,
         time: 30000,

@@ -30,7 +30,7 @@ const addRecord: SlashCommand = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute: async (ctx) => {
-    const interaction = await ctx.reply({
+    const interaction = await ctx.editReply({
       content: `Adding record for ${ctx.options.getString(
         "player"
       )} on ${ctx.options.getString("level")} (${ctx.options.getInteger(
@@ -38,7 +38,7 @@ const addRecord: SlashCommand = {
       )}hz) (${ctx.options.getString("link")}).`,
       components: [confirmation],
     } as InteractionReplyOptions);
-    interaction
+    await interaction
       .awaitMessageComponent({
         componentType: ComponentType.Button,
         time: 30000,
@@ -74,7 +74,12 @@ const addRecord: SlashCommand = {
                 });
               } else if (data.status === 404) {
                 ctx.editReply({
-                  content: `⛔ Player or level not found.`,
+                  content: "⛔ Player or level not found.",
+                  components: [],
+                });
+              } else if (data.status === 409) {
+                ctx.editReply({
+                  content: "⛔ Record already added.",
                   components: [],
                 });
               } else {

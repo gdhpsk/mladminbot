@@ -17,6 +17,7 @@ import updatePlayerName from "./commands/update-player-name";
 import updatePlayerDiscord from "./commands/update-player-discord";
 import addRecord from "./commands/add-record";
 import removeRecord from "./commands/remove-record";
+import updateClassRoles from "./commands/update-class-roles";
 
 env.config();
 
@@ -51,4 +52,5 @@ export default [
   updatePlayerDiscord,
   addRecord,
   removeRecord,
+  updateClassRoles,
 ];

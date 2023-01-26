@@ -21,13 +21,13 @@ const updatePlayerDiscord: SlashCommand = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute: async (ctx) => {
-    const interaction = await ctx.reply({
+    const interaction = await ctx.editReply({
       content: `Updating ${ctx.options.getString(
         "name"
       )} discord ID to "${ctx.options.getString("newdiscord")}".`,
       components: [confirmation],
     } as InteractionReplyOptions);
-    interaction
+    await interaction
       .awaitMessageComponent({
         componentType: ComponentType.Button,
         time: 30000,

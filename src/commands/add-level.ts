@@ -29,7 +29,7 @@ const addLevel: SlashCommand = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute: async (ctx) => {
-    const interaction = await ctx.reply({
+    const interaction = await ctx.editReply({
       content: `Adding ${ctx.options.getString(
         "name"
       )} by ${ctx.options.getString("creator")} at #${ctx.options.getInteger(
@@ -37,7 +37,7 @@ const addLevel: SlashCommand = {
       )}`,
       components: [confirmation],
     } as InteractionReplyOptions);
-    interaction
+    await interaction
       .awaitMessageComponent({
         componentType: ComponentType.Button,
         time: 30000,
