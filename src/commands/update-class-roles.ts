@@ -54,8 +54,7 @@ const updateClassRoles: SlashCommand = {
                       classes.map((c) => c[1]).includes(id)
                     );
                     if (correctRole?.id === currentRole?.id) continue;
-                    if (!(currentRole === undefined))
-                      await member.roles.remove(currentRole);
+                    currentRole && await member.roles.remove(currentRole);
                     await member.roles.add(correctRole as Role);
                     const report = await ctx.channel?.send(
                       `🔸 ${member.user.username}`
