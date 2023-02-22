@@ -43,18 +43,19 @@ const updateClassRoles: SlashCommand = {
                 ];
                 try {
                   for (const player of await data.json()) {
+                    await ctx.guild?.members.fetch()
                     const member = ctx.guild?.members.cache.get(player.discord);
                     if (member === undefined) continue;
                     if (member.id === "220989535218171904") continue;
                     const correctRole = ctx.guild?.roles.cache.get(
-                      (classes.find((c) => player.points < c[0]) ??
+                      (classes.find((c) => player.points.comb < c[0]) ??
                         classes[0])[1] as string
                     );
                     const currentRole = member.roles.cache.find((_, id) =>
                       classes.map((c) => c[1]).includes(id)
                     );
                     if (correctRole?.id === currentRole?.id) continue;
-                    currentRole && await member.roles.remove(currentRole);
+                    currentRole && (await member.roles.remove(currentRole));
                     await member.roles.add(correctRole as Role);
                     const report = await ctx.channel?.send(
                       `🔸 ${member.user.username}`

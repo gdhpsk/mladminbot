@@ -20,7 +20,7 @@ const banPlayer: SlashCommand = {
       !(ctx.user.id === "733456210925322331")
     ) {
       await ctx.editReply(
-        "⛔ You are not @<220989535218171904>. Prepare to die."
+        "⛔ You are not <@220989535218171904>. Prepare to die."
       );
     } else {
       const interaction = await ctx.editReply({
