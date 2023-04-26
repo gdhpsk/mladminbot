@@ -40,6 +40,17 @@ export const confirmation = new ActionRowBuilder().addComponents([
     .setStyle(ButtonStyle.Secondary),
 ]);
 
+export const pagination = new ActionRowBuilder().addComponents([
+  new ButtonBuilder()
+    .setCustomId("prev")
+    .setLabel("⬅️")
+    .setStyle(ButtonStyle.Secondary),
+  new ButtonBuilder()
+    .setCustomId("next")
+    .setLabel("➡️")
+    .setStyle(ButtonStyle.Secondary),
+]);
+
 export default [
   addLevel,
   removeLevel,

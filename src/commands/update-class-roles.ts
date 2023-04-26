@@ -43,7 +43,7 @@ const updateClassRoles: SlashCommand = {
                 ];
                 try {
                   for (const player of await data.json()) {
-                    await ctx.guild?.members.fetch()
+                    await ctx.guild?.members.fetch();
                     const member = ctx.guild?.members.cache.get(player.discord);
                     if (member === undefined) continue;
                     if (member.id === "220989535218171904") continue;
