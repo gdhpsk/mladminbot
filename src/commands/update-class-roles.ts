@@ -6,6 +6,7 @@ import {
   Role,
 } from "discord.js";
 import { SlashCommand, confirmation, siteURI } from "../commands";
+import axios from "axios";
 
 const updateClassRoles: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -25,9 +26,10 @@ const updateClassRoles: SlashCommand = {
       .then(async (button) => {
         await button.deferUpdate();
         if (button.customId === "confirm") {
-          fetch(`${siteURI}/members`, { mode: "cors" })
-            .then(async (data) => {
-              if (data.status === 200) {
+          axios
+            .get(`${siteURI}/members`)
+            .then(async (resp) => {
+              if (resp.status === 200) {
                 ctx.editReply({
                   content: "Updating class roles for all MS members...",
                   components: [],
@@ -42,7 +44,7 @@ const updateClassRoles: SlashCommand = {
                   [20000, "696051402929078412"],
                 ];
                 try {
-                  for (const player of await data.json()) {
+                  for (const player of resp.data) {
                     await ctx.guild?.members.fetch();
                     const member = ctx.guild?.members.cache.get(player.discord);
                     if (member === undefined) continue;
@@ -75,7 +77,7 @@ const updateClassRoles: SlashCommand = {
                   content: "⚠️ An unknown error has occurred.",
                   components: [],
                 });
-                console.log(data.status);
+                console.log(resp.status);
               }
             })
             .catch((error) => {

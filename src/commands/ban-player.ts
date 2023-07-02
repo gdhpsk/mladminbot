@@ -5,6 +5,7 @@ import {
   InteractionReplyOptions,
 } from "discord.js";
 import { SlashCommand, confirmation, siteURI, siteToken } from "../commands";
+import axios from "axios";
 
 const banPlayer: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -37,14 +38,13 @@ const banPlayer: SlashCommand = {
         .then(async (button) => {
           await button.deferUpdate();
           if (button.customId === "confirm") {
-            fetch(`${siteURI}/players/${ctx.options.getString("name")}`, {
-              method: "DELETE",
-              mode: "cors",
-              headers: {
-                "Content-Type": "application/json",
-                auth: siteToken,
-              },
-            })
+            axios
+              .delete(`${siteURI}/players/${ctx.options.getString("name")}`, {
+                headers: {
+                  "Content-Type": "application/json",
+                  auth: siteToken,
+                },
+              })
               .then((data) => {
                 if (data.status === 200) {
                   ctx.editReply({

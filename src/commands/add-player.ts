@@ -5,6 +5,7 @@ import {
   InteractionReplyOptions,
 } from "discord.js";
 import { SlashCommand, confirmation, siteURI, siteToken } from "../commands";
+import axios from "axios";
 
 const addPlayer: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -30,18 +31,20 @@ const addPlayer: SlashCommand = {
       .then(async (button) => {
         await button.deferUpdate();
         if (button.customId === "confirm") {
-          fetch(`${siteURI}/players`, {
-            method: "POST",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-              auth: siteToken,
-            },
-            body: JSON.stringify({
-              name: ctx.options.getString("name"),
-              discord: ctx.options.getString("discord"),
-            }),
-          })
+          axios
+            .post(
+              `${siteURI}/players`,
+              JSON.stringify({
+                name: ctx.options.getString("name"),
+                discord: ctx.options.getString("discord"),
+              }),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  auth: siteToken,
+                },
+              }
+            )
             .then((data) => {
               if (data.status === 201) {
                 ctx.editReply({

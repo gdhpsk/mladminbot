@@ -1,7 +1,7 @@
 import {
   SlashCommandBuilder,
   EmbedBuilder,
-  InteractionReplyOptions
+  InteractionReplyOptions,
 } from "discord.js";
 import axios from "axios";
 import { SlashCommand, siteURI, pagination } from "../commands";
@@ -19,20 +19,18 @@ const leaderboard: SlashCommand = {
           const { data: player } = resp;
           const leaderboardEmbed = new EmbedBuilder()
             .setTitle("Leaderboard")
-            .addFields(
-              { name: "", value: player.mclass.comb }
-            )
+            .addFields({ name: "", value: player.mclass.comb });
           ctx.editReply({
             embeds: [leaderboardEmbed],
-            components: [pagination]
+            components: [pagination],
           } as InteractionReplyOptions);
         } else if (resp.status === 404) {
           ctx.editReply({
-            content: `⛔ "${ctx.options.getString("name")}" was not found.`
+            content: `⛔ "${ctx.options.getString("name")}" was not found.`,
           });
         } else {
           ctx.editReply({
-            content: "⚠️ An unknown error has occurred."
+            content: "⚠️ An unknown error has occurred.",
           });
         }
       })

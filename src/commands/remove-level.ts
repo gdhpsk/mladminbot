@@ -5,6 +5,7 @@ import {
   InteractionReplyOptions,
 } from "discord.js";
 import { SlashCommand, confirmation, siteURI, siteToken } from "../commands";
+import axios from "axios";
 
 const removeLevel: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -27,14 +28,13 @@ const removeLevel: SlashCommand = {
       .then(async (button) => {
         await button.deferUpdate();
         if (button.customId === "confirm") {
-          fetch(`${siteURI}/levels/${ctx.options.getString("name")}`, {
-            method: "DELETE",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-              auth: siteToken,
-            },
-          })
+          axios
+            .delete(`${siteURI}/levels/${ctx.options.getString("name")}`, {
+              headers: {
+                "Content-Type": "application/json",
+                auth: siteToken,
+              },
+            })
             .then((data) => {
               if (data.status === 200) {
                 ctx.editReply({

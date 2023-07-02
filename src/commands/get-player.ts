@@ -1,7 +1,4 @@
-import {
-  SlashCommandBuilder,
-  EmbedBuilder,
-} from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import axios from "axios";
 import { SlashCommand, siteURI } from "../commands";
 
@@ -23,20 +20,30 @@ const getPlayer: SlashCommand = {
             .setTitle(player.name)
             .addFields(
               { name: "Class", value: player.mclass.comb, inline: true },
-              { name: "Points", value: player.points.comb.toFixed(2), inline: true },
-              { name: "Refresh Rate", value: Object.keys(player.hertz).map((rr) => rr+"hz").join(" / "), inline: true },
-              { name: "Tag", value: player.discord ?? "N/A", inline: true },
-            )
+              {
+                name: "Points",
+                value: player.points.comb.toFixed(2),
+                inline: true,
+              },
+              {
+                name: "Refresh Rate",
+                value: Object.keys(player.hertz)
+                  .map((rr) => rr + "hz")
+                  .join(" / "),
+                inline: true,
+              },
+              { name: "Tag", value: player.discord ?? "N/A", inline: true }
+            );
           ctx.editReply({
-            embeds: [playerEmbed]
+            embeds: [playerEmbed],
           });
         } else if (resp.status === 404) {
           ctx.editReply({
-            content: `⛔ "${ctx.options.getString("name")}" was not found.`
+            content: `⛔ "${ctx.options.getString("name")}" was not found.`,
           });
         } else {
           ctx.editReply({
-            content: "⚠️ An unknown error has occurred."
+            content: "⚠️ An unknown error has occurred.",
           });
         }
       })

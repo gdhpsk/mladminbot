@@ -5,6 +5,7 @@ import {
   InteractionReplyOptions,
 } from "discord.js";
 import { SlashCommand, confirmation, siteURI, siteToken } from "../commands";
+import axios from "axios";
 
 const moveLevel: SlashCommand = {
   command: new SlashCommandBuilder()
@@ -36,17 +37,19 @@ const moveLevel: SlashCommand = {
       .then(async (button) => {
         await button.deferUpdate();
         if (button.customId === "confirm") {
-          fetch(`${siteURI}/levels/${ctx.options.getString("name")}`, {
-            method: "PATCH",
-            mode: "cors",
-            headers: {
-              "Content-Type": "application/json",
-              auth: siteToken,
-            },
-            body: JSON.stringify({
-              newpos: ctx.options.getInteger("position"),
-            }),
-          })
+          axios
+            .patch(
+              `${siteURI}/levels/${ctx.options.getString("name")}`,
+              JSON.stringify({
+                newpos: ctx.options.getInteger("position"),
+              }),
+              {
+                headers: {
+                  "Content-Type": "application/json",
+                  auth: siteToken,
+                },
+              }
+            )
             .then((data) => {
               if (data.status === 200) {
                 ctx.editReply({
