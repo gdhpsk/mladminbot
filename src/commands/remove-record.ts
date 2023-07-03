@@ -44,31 +44,32 @@ const removeRecord: SlashCommand = {
                 level: ctx.options.getString("level"),
               }),
             })
-            .then((data) => {
-              if (data.status === 200) {
-                ctx.editReply({
-                  content: `✅ Record for "${ctx.options.getString(
-                    "player"
-                  )}" on ${ctx.options.getString(
-                    "level"
-                  )} was removed from the list.`,
-                  components: [],
-                });
-              } else if (data.status === 404) {
-                ctx.editReply({
-                  content: `⛔ Player or level was not found.`,
-                  components: [],
-                });
-              } else {
-                ctx.editReply({
-                  content: "⚠️ An unknown error has occurred.",
-                  components: [],
-                });
-              }
+            .then(() => {
+              ctx.editReply({
+                content: `✅ Record for "${ctx.options.getString(
+                  "player"
+                )}" on ${ctx.options.getString(
+                  "level"
+                )} was removed from the list.`,
+                components: [],
+              });
             })
             .catch((error) => {
-              ctx.editReply("⚠️ Request did not go through. Try again later.");
-              console.error(error);
+              switch (error.response.status) {
+                case 404:
+                  ctx.editReply({
+                    content: `⛔ Player or level was not found.`,
+                    components: [],
+                  });
+                  break;
+                default:
+                  ctx.editReply({
+                    content: "⚠️ An unknown error has occurred.",
+                    components: [],
+                  });
+                  console.error(error);
+                  break;
+              }
             });
         } else if (button.customId === "cancel") {
           ctx.deleteReply();

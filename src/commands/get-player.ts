@@ -14,42 +14,41 @@ const getPlayer: SlashCommand = {
     axios
       .get(`${siteURI}/players/${ctx.options.getString("name")}`)
       .then((resp) => {
-        if (resp.status === 200) {
-          const { data: player } = resp;
-          const playerEmbed = new EmbedBuilder()
-            .setTitle(player.name)
-            .addFields(
-              { name: "Class", value: player.mclass.comb, inline: true },
-              {
-                name: "Points",
-                value: player.points.comb.toFixed(2),
-                inline: true,
-              },
-              {
-                name: "Refresh Rate",
-                value: Object.keys(player.hertz)
-                  .map((rr) => rr + "hz")
-                  .join(" / "),
-                inline: true,
-              },
-              { name: "Tag", value: player.discord ?? "N/A", inline: true }
-            );
-          ctx.editReply({
-            embeds: [playerEmbed],
-          });
-        } else if (resp.status === 404) {
-          ctx.editReply({
-            content: `⛔ "${ctx.options.getString("name")}" was not found.`,
-          });
-        } else {
-          ctx.editReply({
-            content: "⚠️ An unknown error has occurred.",
-          });
-        }
+        const { data: player } = resp;
+        const playerEmbed = new EmbedBuilder().setTitle(player.name).addFields(
+          { name: "Class", value: player.mclass.comb, inline: true },
+          {
+            name: "Points",
+            value: player.points.comb.toFixed(2),
+            inline: true,
+          },
+          {
+            name: "Refresh Rate",
+            value: Object.keys(player.hertz)
+              .map((rr) => rr + "hz")
+              .join(" / "),
+            inline: true,
+          },
+          { name: "Tag", value: player.discord ?? "N/A", inline: true }
+        );
+        ctx.editReply({
+          embeds: [playerEmbed],
+        });
       })
       .catch((error) => {
-        ctx.editReply("⚠️ Request did not go through. Try again later.");
-        console.error(error);
+        switch (error.response.status) {
+          case 404:
+            ctx.editReply({
+              content: `⛔ "${ctx.options.getString("name")}" was not found.`,
+            });
+            break;
+          default:
+            ctx.editReply({
+              content: "⚠️ An unknown error has occurred.",
+            });
+            console.error(error);
+            break;
+        }
       });
   },
 };

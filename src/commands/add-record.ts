@@ -63,38 +63,40 @@ const addRecord: SlashCommand = {
                 },
               }
             )
-            .then((data) => {
-              if (data.status === 201) {
-                ctx.editReply({
-                  content: `✅ Record was added for ${ctx.options.getString(
-                    "player"
-                  )} on "${ctx.options.getString(
-                    "level"
-                  )}" (${ctx.options.getInteger(
-                    "hertz"
-                  )}hz) (${ctx.options.getString("link")}).`,
-                  components: [],
-                });
-              } else if (data.status === 404) {
-                ctx.editReply({
-                  content: "⛔ Player or level not found.",
-                  components: [],
-                });
-              } else if (data.status === 409) {
-                ctx.editReply({
-                  content: "⛔ Record already added.",
-                  components: [],
-                });
-              } else {
-                ctx.editReply({
-                  content: "⚠️ An unknown error has occurred.",
-                  components: [],
-                });
-              }
+            .then(() => {
+              ctx.editReply({
+                content: `✅ Record was added for ${ctx.options.getString(
+                  "player"
+                )} on "${ctx.options.getString(
+                  "level"
+                )}" (${ctx.options.getInteger(
+                  "hertz"
+                )}hz) (${ctx.options.getString("link")}).`,
+                components: [],
+              });
             })
             .catch((error) => {
-              ctx.editReply("⚠️ Request did not go through. Try again later.");
-              console.error(error);
+              switch (error.response.status) {
+                case 404:
+                  ctx.editReply({
+                    content: "⛔ Player or level not found.",
+                    components: [],
+                  });
+                  break;
+                case 409:
+                  ctx.editReply({
+                    content: "⛔ Record already added.",
+                    components: [],
+                  });
+                  break;
+                default:
+                  ctx.editReply({
+                    content: "⚠️ An unknown error has occurred.",
+                    components: [],
+                  });
+                  console.error(error);
+                  break;
+              }
             });
         } else if (button.customId === "cancel") {
           ctx.deleteReply();

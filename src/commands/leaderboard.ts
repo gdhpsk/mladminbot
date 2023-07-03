@@ -15,28 +15,29 @@ const leaderboard: SlashCommand = {
     axios
       .get(`${siteURI}/players`)
       .then((resp) => {
-        if (resp.status === 200) {
-          const { data: player } = resp;
-          const leaderboardEmbed = new EmbedBuilder()
-            .setTitle("Leaderboard")
-            .addFields({ name: "", value: player.mclass.comb });
-          ctx.editReply({
-            embeds: [leaderboardEmbed],
-            components: [pagination],
-          } as InteractionReplyOptions);
-        } else if (resp.status === 404) {
-          ctx.editReply({
-            content: `⛔ "${ctx.options.getString("name")}" was not found.`,
-          });
-        } else {
-          ctx.editReply({
-            content: "⚠️ An unknown error has occurred.",
-          });
-        }
+        const { data: player } = resp;
+        const leaderboardEmbed = new EmbedBuilder()
+          .setTitle("Leaderboard")
+          .addFields({ name: "", value: player.mclass.comb });
+        ctx.editReply({
+          embeds: [leaderboardEmbed],
+          components: [pagination],
+        } as InteractionReplyOptions);
       })
       .catch((error) => {
-        ctx.editReply("⚠️ Request did not go through. Try again later.");
-        console.error(error);
+        switch (error.response.status) {
+          case 404:
+            ctx.editReply({
+              content: `⛔ "${ctx.options.getString("name")}" was not found.`,
+            });
+            break;
+          default:
+            ctx.editReply({
+              content: "⚠️ An unknown error has occurred.",
+            });
+            console.error(error);
+            break;
+        }
       });
   },
 };

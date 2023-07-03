@@ -45,31 +45,32 @@ const addPlayer: SlashCommand = {
                 },
               }
             )
-            .then((data) => {
-              if (data.status === 201) {
-                ctx.editReply({
-                  content: `✅ "${ctx.options.getString(
-                    "name"
-                  )}" was added to the leaderboard.`,
-                  components: [],
-                });
-              } else if (data.status === 409) {
-                ctx.editReply({
-                  content: `⛔ "${ctx.options.getString(
-                    "name"
-                  )}" is already on the leaderboard.`,
-                  components: [],
-                });
-              } else {
-                ctx.editReply({
-                  content: "⚠️ An unknown error has occurred.",
-                  components: [],
-                });
-              }
+            .then(() => {
+              ctx.editReply({
+                content: `✅ "${ctx.options.getString(
+                  "name"
+                )}" was added to the leaderboard.`,
+                components: [],
+              });
             })
             .catch((error) => {
-              ctx.editReply("⚠️ Request did not go through. Try again later.");
-              console.error(error);
+              switch (error.response.status) {
+                case 409:
+                  ctx.editReply({
+                    content: `⛔ "${ctx.options.getString(
+                      "name"
+                    )}" is already on the leaderboard.`,
+                    components: [],
+                  });
+                  break;
+                default:
+                  ctx.editReply({
+                    content: "⚠️ An unknown error has occurred.",
+                    components: [],
+                  });
+                  console.error(error);
+                  break;
+              }
             });
         } else if (button.customId === "cancel") {
           ctx.deleteReply();

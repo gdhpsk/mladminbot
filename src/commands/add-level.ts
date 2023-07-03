@@ -61,31 +61,32 @@ const addLevel: SlashCommand = {
                 },
               }
             )
-            .then((data) => {
-              if (data.status === 201) {
-                ctx.editReply({
-                  content: `✅ "${ctx.options.getString(
-                    "name"
-                  )}" was placed at #${ctx.options.getInteger("position")}.`,
-                  components: [],
-                });
-              } else if (data.status === 409) {
-                ctx.editReply({
-                  content: `⛔ "${ctx.options.getString(
-                    "name"
-                  )}" is already on the list.`,
-                  components: [],
-                });
-              } else {
-                ctx.editReply({
-                  content: "⚠️ An unknown error has occurred.",
-                  components: [],
-                });
-              }
+            .then(() => {
+              ctx.editReply({
+                content: `✅ "${ctx.options.getString(
+                  "name"
+                )}" was placed at #${ctx.options.getInteger("position")}.`,
+                components: [],
+              });
             })
             .catch((error) => {
-              ctx.editReply("⚠️ Request did not go through. Try again later.");
-              console.error(error);
+              switch (error.response.status) {
+                case 409:
+                  ctx.editReply({
+                    content: `⛔ "${ctx.options.getString(
+                      "name"
+                    )}" is already on the list.`,
+                    components: [],
+                  });
+                  break;
+                default:
+                  ctx.editReply({
+                    content: "⚠️ An unknown error has occurred.",
+                    components: [],
+                  });
+                  console.error(error);
+                  break;
+              }
             });
         } else if (button.customId === "cancel") {
           ctx.deleteReply();

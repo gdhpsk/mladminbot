@@ -49,33 +49,32 @@ const updateLevelName: SlashCommand = {
                 },
               }
             )
-            .then((data) => {
-              if (data.status === 200) {
-                ctx.editReply({
-                  content: `✅ "${ctx.options.getString(
-                    "name"
-                  )}" name was updated to "${ctx.options.getString(
-                    "newname"
-                  )}".`,
-                  components: [],
-                });
-              } else if (data.status === 404) {
-                ctx.editReply({
-                  content: `⛔ "${ctx.options.getString(
-                    "name"
-                  )}" was not found.`,
-                  components: [],
-                });
-              } else {
-                ctx.editReply({
-                  content: "⚠️ An unknown error has occurred.",
-                  components: [],
-                });
-              }
+            .then(() => {
+              ctx.editReply({
+                content: `✅ "${ctx.options.getString(
+                  "name"
+                )}" name was updated to "${ctx.options.getString("newname")}".`,
+                components: [],
+              });
             })
             .catch((error) => {
-              ctx.editReply("⚠️ Request did not go through. Try again later.");
-              console.error(error);
+              switch (error.response.status) {
+                case 404:
+                  ctx.editReply({
+                    content: `⛔ "${ctx.options.getString(
+                      "name"
+                    )}" was not found.`,
+                    components: [],
+                  });
+                  break;
+                default:
+                  ctx.editReply({
+                    content: "⚠️ An unknown error has occurred.",
+                    components: [],
+                  });
+                  console.error(error);
+                  break;
+              }
             });
         } else if (button.customId === "cancel") {
           ctx.deleteReply();
