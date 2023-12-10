@@ -45,5 +45,5 @@ const app = listener(client);
 client.login(process.env.BOT_TOKEN as string);
 
 app.listen(process.env.PORT ?? 3001, () => {
-  console.log("Listener at 3001");
+  console.log("Listener at " + process.env.PORT ?? 3001);
 });
