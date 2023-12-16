@@ -42,7 +42,8 @@ export default (client: Client) => {
           { name: "Player", value: req.body.player, inline: true },
           { name: "Level", value: req.body.level, inline: true },
           { name: "Hertz", value: String(req.body.hertz), inline: true },
-          { name: "\u200B", value: req.body.link }
+          { name: "Raw Footage", value: req.body.raw },
+          { name: "Video", value: req.body.link }
         )
         .setTimestamp();
       const decision = new ActionRowBuilder().addComponents(
