@@ -23,10 +23,12 @@ const moveLevel: SlashCommand = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute: async (ctx) => {
+    let req = await fetch(`${siteURI}/levels?position=${(ctx.options.getInteger("position") || 2) - 1}`)
+    let below = await req.json()
     const interaction = await ctx.editReply({
       content: `Moving ${ctx.options.getString(
         "name"
-      )} to #${ctx.options.getInteger("position")}.`,
+      )} to #${ctx.options.getInteger("position")}, below ${below[0]?.name || "nothing"}.`,
       components: [confirmation],
     } as InteractionReplyOptions);
     await interaction
@@ -54,7 +56,7 @@ const moveLevel: SlashCommand = {
               ctx.editReply({
                 content: `✅ "${ctx.options.getString(
                   "name"
-                )}" was moved to #${ctx.options.getInteger("position")}.`,
+                )}" was moved to #${ctx.options.getInteger("position")}, below ${below[0]?.name || "nothing"}.`,
                 components: [],
               });
             })

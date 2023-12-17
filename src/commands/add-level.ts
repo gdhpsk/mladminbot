@@ -30,12 +30,14 @@ const addLevel: SlashCommand = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute: async (ctx) => {
+    let req = await fetch(`${siteURI}/levels?position=${(ctx.options.getInteger("position") || 2) - 1}`)
+    let below = await req.json()
     const interaction = await ctx.editReply({
       content: `Adding ${ctx.options.getString(
         "name"
       )} by ${ctx.options.getString("creator")} at #${ctx.options.getInteger(
         "position"
-      )}`,
+      )}, below ${below[0]?.name || "nothing"}`,
       components: [confirmation],
     } as InteractionReplyOptions);
     await interaction
@@ -65,7 +67,7 @@ const addLevel: SlashCommand = {
               ctx.editReply({
                 content: `✅ "${ctx.options.getString(
                   "name"
-                )}" was placed at #${ctx.options.getInteger("position")}.`,
+                )}" was placed at #${ctx.options.getInteger("position")}, below ${below[0]?.name || "nothing"}.`,
                 components: [],
               });
             })
