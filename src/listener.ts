@@ -57,7 +57,7 @@ export default (client: Client) => {
           .setStyle(ButtonStyle.Danger)
       );
       const channel = client.channels.cache.get(
-        "1064986062100897932"
+        process.env.SUBMISSIONS_CHANNEL as string
       ) as TextChannel;
       const message = await channel.send({
         embeds: [recordEmbed],
