@@ -7,8 +7,8 @@
   "author": "<benbarber121@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "start": "ts-node src/bot.ts",
-    "build": "ts-node src/deployCommands.ts",
+    "start": "ts-node -T src/bot.ts",
+    "build": "ts-node -T src/deployCommands.ts",
     "deploy:commands": "ts-node src/deployCommands.ts",
     "lint": "npx prettier src --write"
   },
