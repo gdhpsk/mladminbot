@@ -22,8 +22,18 @@ const moveLevel: SlashCommand = {
         .setRequired(true)
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
-  execute: async (ctx) => {
-    let req = await fetch(`${siteURI}/levels?position=${(ctx.options.getInteger("position") as number)}`)
+  execute: async (ctx) => {    
+    let req2 = await fetch(`${siteURI}/levels/${ctx.options.getString("name")}`)
+    if(!req2.ok) {
+      ctx.editReply({
+        content: `⛔ "${ctx.options.getString(
+          "name"
+        )}" was not found.`,
+        components: [],
+      });
+    }
+    let below2 = await req2.json()
+    let req = await fetch(`${siteURI}/levels?position=${(ctx.options.getInteger("position") as number + (below2.position > (ctx.options.getInteger("position") as number) ? -1 : 0))}`)
     let below = await req.json()
     const interaction = await ctx.editReply({
       content: `Moving ${ctx.options.getString(
