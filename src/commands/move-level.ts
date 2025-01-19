@@ -23,7 +23,7 @@ const moveLevel: SlashCommand = {
     )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute: async (ctx) => {
-    let req = await fetch(`${siteURI}/levels?position=${(ctx.options.getInteger("position") || 2) - 1}`)
+    let req = await fetch(`${siteURI}/levels?position=${(ctx.options.getInteger("position") || 0)}`)
     let below = await req.json()
     const interaction = await ctx.editReply({
       content: `Moving ${ctx.options.getString(
