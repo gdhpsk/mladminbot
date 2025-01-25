@@ -25,7 +25,7 @@ import {
           .setName("position")
           .setDescription("List placement position")
           .setMinValue(1)
-          .setMaxValue(100)
+          .setMaxValue(50)
           .setRequired(true)
       )
       .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
