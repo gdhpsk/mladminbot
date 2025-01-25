@@ -7,6 +7,7 @@ import {
 } from "discord.js";
 import env from "dotenv";
 import addLevel from "./commands/add-level";
+import addHRRLevel from "./commands/add-hrr-level";
 import removeLevel from "./commands/remove-level";
 import moveLevel from "./commands/move-level";
 import updateLevelName from "./commands/update-level-name";
@@ -65,5 +66,6 @@ export default [
   addRecord,
   removeRecord,
   updateClassRoles,
-  noDiscordPlayers
+  noDiscordPlayers,
+  addHRRLevel
 ];
