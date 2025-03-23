@@ -8,6 +8,7 @@ import {
 import env from "dotenv";
 import addLevel from "./commands/add-level";
 import addHRRLevel from "./commands/add-hrr-level";
+import addHRRRecord from "./commands/add-hrr-record";
 import removeLevel from "./commands/remove-level";
 import moveLevel from "./commands/move-level";
 import updateLevelName from "./commands/update-level-name";
@@ -67,5 +68,6 @@ export default [
   removeRecord,
   updateClassRoles,
   noDiscordPlayers,
-  addHRRLevel
+  addHRRLevel,
+  addHRRRecord
 ];
