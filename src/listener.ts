@@ -35,15 +35,20 @@ export default (client: Client) => {
           break;
       }
       delete req.body.isNew;
-      const recordEmbed = new EmbedBuilder()
-        .setColor(showButtons ? "Blue" : "Yellow")
-        .setTitle(`Record Submission ${alertNew}`)
-        .addFields(
-          { name: "Player", value: req.body.player, inline: true },
+      const fields = [
+        { name: "Player", value: req.body.player, inline: true },
           { name: "Level", value: req.body.level, inline: true },
           { name: "Hertz", value: String(req.body.hertz), inline: true },
           { name: "Raw Footage", value: req.body.raw },
           { name: "Video", value: req.body.link }
+      ]
+      if(req.body.progress) {
+        fields.push({name: "Progress", value: JSON.stringify(req.body.progress)})
+      }
+      const recordEmbed = new EmbedBuilder()
+        .setColor(showButtons ? "Blue" : "Yellow")
+        .setTitle(`${req.body.hrr ? "HRR " : ""}Record Submission ${alertNew}`)
+        .addFields(...fields
         )
         .setTimestamp();
       const decision = new ActionRowBuilder().addComponents(
@@ -69,7 +74,7 @@ export default (client: Client) => {
           .then(async (button) => {
             await button.deferUpdate();
             if (button.customId === "accept") {
-              fetch(`${siteURI}/records`, {
+              fetch(`${siteURI}/records${req.body.hrr ? "/hrr" : ""}`, {
                 method: "POST",
                 mode: "cors",
                 headers: {
@@ -80,7 +85,7 @@ export default (client: Client) => {
               }).then((data) => {
                 if (data.status === 201) {
                   message.edit({
-                    content: `✅ Record was accepted for ${req.body.player} on "${req.body.level}" (${req.body.hertz}hz) (${req.body.link}).`,
+                    content: `✅${req.body.hrr ? " HRR" : ""} Record was accepted for ${req.body.player} on "${req.body.level}" (${req.body.hertz}hz) (${req.body.link}).`,
                     components: [],
                     embeds: [],
                   });

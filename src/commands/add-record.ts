@@ -29,10 +29,16 @@ const addRecord: SlashCommand = {
         .setDescription("Link to youtube completion video")
         .setRequired(true)
     )
+    .addIntegerOption((option) =>
+      option
+        .setName("percent")
+        .setDescription("The % of the record (only for top 50)")
+        .setRequired(false)
+    )
     .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
   execute: async (ctx) => {
     const interaction = await ctx.editReply({
-      content: `Adding record for ${ctx.options.getString(
+      content: `Adding ${ctx.options.getInteger("percent") || 100}% record for ${ctx.options.getString(
         "player"
       )} on ${ctx.options.getString("level")} (${ctx.options.getInteger(
         "hertz"
@@ -55,6 +61,7 @@ const addRecord: SlashCommand = {
                 level: ctx.options.getString("level"),
                 hertz: ctx.options.getInteger("hertz"),
                 link: ctx.options.getString("link"),
+                percent: ctx.options.getString("percent"),
               }),
               {
                 headers: {
@@ -65,7 +72,7 @@ const addRecord: SlashCommand = {
             )
             .then(() => {
               ctx.editReply({
-                content: `✅ Record was added for ${ctx.options.getString(
+                content: `✅ Record was added for ${ctx.options.getInteger("percent") || 100}% on ${ctx.options.getString(
                   "player"
                 )} on "${ctx.options.getString(
                   "level"
