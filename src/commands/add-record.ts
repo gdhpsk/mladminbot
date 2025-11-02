@@ -61,7 +61,7 @@ const addRecord: SlashCommand = {
                 level: ctx.options.getString("level"),
                 hertz: ctx.options.getInteger("hertz"),
                 link: ctx.options.getString("link"),
-                percent: ctx.options.getString("percent"),
+                percent: ctx.options.getInteger("percent"),
               }),
               {
                 headers: {
